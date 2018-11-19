@@ -30,7 +30,11 @@ $advertisement = [
          "categor" => "Разное",
          "price" => 5400,
          "picture_url" => "img/lot-6.jpg"]
-]
+];
+function number_form_rub ($arg){
+  $num = number_format($arg, $decimals = 0, $dec_point=".", $thousands_sep = " ");
+  return $num . " <b class=\"rub\">р</b>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -105,7 +109,7 @@ $advertisement = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?=$value["price"];?></span>
-                            <span class="lot__cost">цена<b class="rub">р</b></span>
+                            <span class="lot__cost"><?=number_form_rub ($value["price"])?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
