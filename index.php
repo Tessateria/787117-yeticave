@@ -36,6 +36,10 @@ function number_form_rub ($arg){
   $num = number_format($arg, $decimals = 0, $dec_point=".", $thousands_sep = " ");
   return $num . " <b class=\"rub\">р</b>";
 }
+function xss ($arg){
+    $text = strip_tags($arg);
+    return $text;
+}
 
 require_once ("functions.php");
 
