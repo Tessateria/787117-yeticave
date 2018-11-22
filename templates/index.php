@@ -26,7 +26,7 @@
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?=xss($value["price"]);?></span>
-                            <span class="lot__cost"><?=xss(number_form_rub ($value["price"]))?></span>
+                            <span class="lot__cost"><?=number_form_rub(xss($value["price"]))?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
