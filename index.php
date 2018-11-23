@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("Europe/Moscow");
 $is_auth = rand(0, 1);
 
 $user_name = 'Наталья';
@@ -32,12 +33,19 @@ $advertisement = [
          "price" => 5400,
          "picture_url" => "img/lot-6.jpg"]
 ];
+$midnight = strtotime('tomorrow');
+$time_to_midnight = $midnight - time();
+$hours_to_midnight = floor($time_to_midnight/3600);
+$minutes_to_midnight = floor(($time_to_midnight%3600)/60);
 
-require_once ("functions.php");
+    require_once ("functions.php");
 
 $page_content = include_template('index.php', [
     'advertisement' => $advertisement,
-    'categories' => $categories
+    'categories' => $categories,
+    'hours_to_midnight' => $hours_to_midnight,
+    'minutes_to_midnight' => $minutes_to_midnight,
+
 ]);
 
 $layout_content = include_template("layout.php", [
