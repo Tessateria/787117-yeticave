@@ -23,3 +23,10 @@ function xss ($arg){
     $text = strip_tags($arg);
     return $text;
 }
+function time_to_midnight (){
+    $time_now = date_create();
+    $time_end = date_create('tomorrow');
+    $diff = date_diff($time_end, $time_now);
+    $date_modified = date_interval_format($diff, '%H:%I');
+    return $date_modified;
+}
