@@ -29,7 +29,7 @@
                             <span class="lot__cost"><?=number_form_rub(xss($value["price"]))?></span>
                         </div>
                         <div class="lot__timer timer">
-                            12:23
+                              <?=$time_to_midnight;?>
                         </div>
                     </div>
                 </div>
