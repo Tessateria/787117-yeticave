@@ -6,22 +6,22 @@ USE yeticave;
 
 CREATE TABLE categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  category TEXT
+  category VARCHAR
 );
 
 CREATE TABLE lots (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  lot_name TEXT,
+  lot_name VARCHAR ,
   specification TEXT,
-  image TEXT,
+  image VARCHAR ,
   start_price FLOAT,
   date_finish DATETIME,
   step_up_value FLOAT,
   author_id INT,
   winner_id INT,
   category_id INT
-)
+);
 
 CREATE TABLE rates (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,7 +29,7 @@ CREATE TABLE rates (
   cost FLOAT,
   user_id INT,
   lot_id INT
-  )
+);
 
 CREATE TABLE users (
   id  INT AUTO_INCREMENT PRIMARY KEY,
@@ -37,8 +37,8 @@ CREATE TABLE users (
   email CHAR(128) NOT NULL UNIQUE,
   username TINYTEXT UNIQUE ,
   password CHAR(64) NOT NULL,
-  avatar TEXT,
+  avatar VARCHAR ,
   contacts TEXT,
   lots_create INT,
   rates_done INT
-)
+);
