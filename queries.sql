@@ -89,3 +89,31 @@ SET cost = 11009,
 	user_id = 2,
 	lot_id = 1;
 
+
+//получить все категории
+SELECT * FROM categories;
+
+
+//получить самые новые, открытые лоты. лот + название, стартовую цену, ссылку на изображение, цену, название категории
+SELECT l.lot_name, l.start_price, l.image, c.category AS category, r.cost AS cost
+FROM lots l
+INNER JOIN categories c ON l.category_id=c.id
+INNER JOIN rates r ON l.id = r.lot_id;
+
+
+//показать лот по его id. Получите также название категории, к которой принадлежит лот
+SELECT * FROM lots
+INNER JOIN categories ON lots.category_id=categories.id
+WHERE lots.id=2;
+
+
+//обновить название лота по его идентификатору
+UPDATE lots
+SET lot_name = "Валенки для сноуборда"
+WHERE id=4;
+
+
+//получить список самых свежих ставок для лота по его идентификатору
+SELECT * FROM rates
+WHERE lot_id=1
+ORDER BY date_add DESC LIMIT 1;
