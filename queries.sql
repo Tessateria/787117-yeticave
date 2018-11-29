@@ -97,8 +97,8 @@ SELECT * FROM categories;
 //получить самые новые, открытые лоты. лот + название, стартовую цену, ссылку на изображение, цену, название категории
 SELECT l.lot_name, l.start_price, l.image, c.category AS category, r.cost AS cost
 FROM lots l
-INNER JOIN categories c ON l.category_id=c.id
-INNER JOIN rates r ON l.id = r.lot_id;
+LEFT OUTER JOIN categories c ON l.category_id=c.id
+LEFT OUTER JOIN rates r ON l.id = r.lot_id;
 
 
 //показать лот по его id. Получите также название категории, к которой принадлежит лот
