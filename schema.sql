@@ -38,7 +38,5 @@ CREATE TABLE users (
   username VARCHAR(100) UNIQUE ,
   password CHAR(64) NOT NULL,
   avatar VARCHAR(255),
-  contacts TEXT,
-  lots_create INT,
-  rates_done INT
+  contacts TEXT
 );
