@@ -30,3 +30,12 @@ function time_to_midnight (){
     $date_modified = date_interval_format($diff, '%H:%I');
     return $date_modified;
 }
+function check_lots_cost($arr){
+    foreach ($arr as $key => $lot) {
+        if (is_null($lot['cost'])) {
+            $lot['cost'] = $lot['start_price'];
+            $arr[$key] = $lot;
+        }
+    }
+    return $arr;
+}
