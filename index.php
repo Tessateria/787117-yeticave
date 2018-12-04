@@ -5,36 +5,43 @@ $is_auth = rand(0, 1);
 $user_name = 'Наталья';
 $title = 'Главная';
 $user_avatar = 'img/user.jpg';
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
-$advertisement = [
-    0 => ["name" => "2014 Rossignol District Snowboard",
-          "categor" => "Доски и лыжи",
-          "price" => 10999,
-          "picture_url" => "img/lot-1.jpg"],
 
-    1 => ["name" => "DC Ply Mens 2016/2017 Snowboard",
-         "categor" => "Доски и лыжи",
-         "price" => 159999,
-         "picture_url" => "img/lot-2.jpg"],
-    2 => ["name" => "Крепления Union Contact Pro 2015 года размер L/XL",
-         "categor" => "Крепления",
-         "price" => 8000,
-         "picture_url" => "img/lot-3.jpg"],
-    3 => ["name" => "Ботинки для сноуборда DC Mutiny Charocal",
-         "categor" => "Ботинки",
-         "price" => 10999,
-         "picture_url" => "img/lot-4.jpg"],
-    4 => ["name" => "Куртка для сноуборда DC Mutiny Charocal",
-         "categor" => "Одежда",
-         "price" => 7500,
-         "picture_url" => "img/lot-5.jpg"],
-    5 => ["name" => "Маска Oakley Canopy",
-         "categor" => "Разное",
-         "price" => 5400,
-         "picture_url" => "img/lot-6.jpg"]
-];
 
     require_once ("functions.php");
+
+
+$link = mysqli_connect("localhost", "root", "", "yeticave");
+mysqli_set_charset($link, "utf8");
+
+if (!$link) {
+    $error = mysqli_connect_error();
+    echo "Не удалось подключиться к MySQL";
+}
+else {
+    $sql_cat = "SELECT * FROM categories";
+    $result_c = mysqli_query($link, $sql_cat);
+
+
+    $sql_lot = "SELECT l.id, l.lot_name, l.start_price, l.image, c.category AS category, MAX(r.cost) AS cost
+FROM lots l
+LEFT OUTER JOIN categories c ON l.category_id=c.id
+LEFT OUTER JOIN rates r ON l.id = r.lot_id
+GROUP BY l.id
+ORDER BY date_create DESC";
+    $result_l = mysqli_query($link, $sql_lot);
+
+
+    if ($result_c and $result_l) {
+        $categories = mysqli_fetch_all($result_c, MYSQLI_ASSOC);
+
+        $advertisement = mysqli_fetch_all($result_l, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        echo "Не удалось получить информацию с БД";
+    }
+}
+$advertisement = check_lots_cost($advertisement);
 
 $page_content = include_template('index.php', [
     'advertisement' => $advertisement,
