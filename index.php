@@ -8,10 +8,8 @@ $user_avatar = 'img/user.jpg';
 
 
     require_once ("functions.php");
+    require_once ("DB_connection.php");
 
-
-$link = mysqli_connect("localhost", "root", "", "yeticave");
-mysqli_set_charset($link, "utf8");
 
 if (!$link) {
     $error = mysqli_connect_error();
