@@ -1,5 +1,6 @@
 <?php
-function include_template($name, $data) {
+function include_template($name, $data)
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -15,11 +16,15 @@ function include_template($name, $data) {
 
     return $result;
 }
-function number_form_rub ($arg){
-    $num = number_format($arg, $decimals = 0, $dec_point=".", $thousands_sep = " ");
+
+function number_form_rub($arg)
+{
+    $num = number_format($arg, $decimals = 0, $dec_point = ".", $thousands_sep = " ");
     return $num . " <b class=\"rub\">р</b>";
 }
-function xss ($arg){
+
+function xss($arg)
+{
     $text = strip_tags($arg);
     return $text;
 }
@@ -33,7 +38,9 @@ function time_to_midnight ($end_date)
     $minutes = date_interval_format($diff, '%I');
     return ($days * 24 + $hours).':'.$minutes;
 }
-function check_lots_cost($arr){
+
+function check_lots_cost($arr)
+{
     foreach ($arr as $key => $lot) {
         if (is_null($lot['cost'])) {
             $lot['cost'] = $lot['start_price'];
@@ -76,4 +83,11 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     }
 
     return $stmt;
+}
+
+function debug($var)
+{
+    echo '<pre>';
+    var_dump($var);
+    echo '</pre>';
 }
