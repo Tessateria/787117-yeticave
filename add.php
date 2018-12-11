@@ -1,19 +1,17 @@
 <?php
 date_default_timezone_set("Europe/Moscow");
 
-require_once ("functions.php");
-require_once ("DB_connection.php");
+require_once("functions.php");
+require_once("DB_connection.php");
 
-if (!$link)
-{
+if (!$link) {
     $error = mysqli_connect_error();
     echo "Не удалось подключиться к MySQL";
 } else {
     $sql_cat = "SELECT * FROM categories";
     $result_c = mysqli_query($link, $sql_cat);
 
-    if ($result_c)
-    {
+    if ($result_c) {
         $categories = mysqli_fetch_all($result_c, MYSQLI_ASSOC);
     } else {
         $error = mysqli_error($link);
@@ -21,34 +19,38 @@ if (!$link)
     }
 }
 
-//$page_content = include_template('add.php', [
-//    'categories' => $categories
-//    ]);
-
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $lot = $_POST;
+    $lot = $_POST['lot'];
 
-    $required = ['lot_name', 'category_id', 'specification', 'lot_image', 'stert_price', 'step_up_value', 'date_finish'];
+    $required = ['lot_name', 'category_id', 'specification', 'start_price', 'step_up_value', 'date_finish'];
     $dict = ['lot_name' => 'Название',
         'category_id' => 'Категория',
         'specification' => 'Описание',
         'lot_image' => 'Изображение',
-        'stert_price' => 'Цена',
+        'start_price' => 'Цена',
         'step_up_value' => 'Ставка',
         'date_finish' => 'Финал'];
 
     $errors = [];
+
     foreach ($required as $key) {
-        if (empty($_POST[$key])) {
+        if (empty($lot[$key])) {
             $errors[$key] = 'Это поле надо заполнить';
         }
     }
+    $lot["step_up_value"] = filter_var($lot["step_up_value"], FILTER_VALIDATE_FLOAT);
+    if ($lot["step_up_value"] === false) {
+        $errors['step_up_value'] = 'В этом поле впишите число';
+    }
 
-    if (isset($_FILES['lot_image']['name'])) {
+    $lot["start_price"] = filter_var($lot["start_price"], FILTER_VALIDATE_FLOAT);
+    if ($lot["start_price"] === false) {
+        $errors['step_up_value'] = 'В этом поле впишите число';
+    }
+
+    if (isset($_FILES['lot_image']['name']) && !empty($_FILES['lot_image']['name'])) {
         $tmp_name = $_FILES['lot_image']['tmp_name'];
-        $path = $_FILES['lot_image'][name];
+        $path = uniqid() . '.jpeg';
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
@@ -67,33 +69,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'lot_image' => $lot_image,
             'errors' => $errors,
             'dict' => $dict,
-            'categories' => $categories
+            'categories' => $categories,
+            'lot' => $lot
         ]);
     } else {
-        $page_content = include_template('lot.php', [
-            'lot_image' => $lot_image
-        ]);
+        $sql_add = "INSERT INTO lots
+SET lot_name = '" . $lot['lot_name'] . "',
+	specification = '" . $lot['specification'] . "',
+	image = 'img/" . $path . "',
+	start_price = " . $lot['start_price'] . ",
+	step_up_value = " . $lot['step_up_value'] . ",
+	author_id = 2,
+	category_id = " . $lot['category_id'] . ",
+	date_finish = '" . date("Y-m-d H:i:s", strtotime($lot['date_finish'])) . "'";
+        mysqli_query($link, $sql_add);
+        $id = mysqli_insert_id($link);
+        header("Location:lot.php?id=$id");
     }
-}
-else {
+} else {
     $page_content = include_template('add.php', [
         'categories' => $categories
     ]);
 
 }
-$lot["step_up_value"] = filter_var($lot["step_up_value"], FILTER_VALIDATE_FLOAT);
-
-$id = mysqli_insert_id($link);
-header("Location:lot.php?id=".$id);
-//echo '<pre>';
-//var_dump($lots);
-//echo '</pre>';
-//
 $layout_content = include_template("layout.php", [
-'page_content' => $page_content,
-//    'user_name' => $user_name,
-//    'is_auth' => $is_auth,
-//    'user_avatar' => $user_avatar,
+    'page_content' => $page_content,
     'categories' => $categories,
     'title' => $title
 ]);
