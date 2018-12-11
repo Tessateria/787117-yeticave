@@ -47,6 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($lot["start_price"] === false) {
         $errors['step_up_value'] = 'В этом поле впишите число';
     }
+    if (!intval($lot['category_id'])){
+        $errors['category_id'] = 'Это поле надо заполнить';
+    }
 
     if (isset($_FILES['lot_image']['name']) && !empty($_FILES['lot_image']['name'])) {
         $tmp_name = $_FILES['lot_image']['tmp_name'];
