@@ -24,7 +24,7 @@
                 <select id="category" name="lot[category_id]">
                     <option>Выберите категорию</option>
                     <?php foreach ($categories as $value): ?>
-                        <option value="<?= ($value["id"]) ?>"><?= ($value["category"]) ?></option>
+                        <option value="<?= ($value["id"]) ?>" <?= ($lot['category_id'] == $value["id"]) ? 'selected' : ''; ?>><?= ($value["category"]) ?></option>
                     <?php endforeach; ?>
                 </select>
                 <span class="form__error">Выберите категорию</span>
@@ -37,7 +37,6 @@
             <span class="form__error">Напишите описание лота</span>
         </div>
         <div class="form__item form__item--file <?= isset($errors['lot_image']) ? "form__item--invalid" : ""; ?>">
-
             <label>Изображение</label>
             <div class="preview">
                 <button class="preview__remove" type="button">x</button>
@@ -49,8 +48,8 @@
                 <input class="visually-hidden" type="file" name="lot_image" id="photo2" value="">
                 <label for="photo2">
                     <span>+ Добавить</span>
-                </label>
             </div>
+            <span class="form__error"><?=$errors['lot_image']; ?></span>
         </div>
         <div class="form__container-three">
             <div
@@ -58,20 +57,20 @@
                 <label for="lot-rate">Начальная цена</label>
                 <input id="lot-rate" type="number" name="lot[start_price]" placeholder="0"
                        value="<?= isset($lot['start_price']) ? $lot['start_price'] : ""; ?>">
-                <span class="form__error">Введите начальную цену</span>
+                <span class="form__error"><?=$errors['start_price']; ?></span>
             </div>
             <div
                 class="form__item form__item--small <?= isset($errors['step_up_value']) ? "form__item--invalid" : ""; ?>">
                 <label for="lot-step">Шаг ставки</label>
                 <input id="lot-step" type="number" name="lot[step_up_value]" placeholder="0"
                        value="<?= isset($lot['step_up_value']) ? $lot['step_up_value'] : ""; ?>">
-                <span class="form__error">Введите шаг ставки</span>
+                <span class="form__error"> <?=$errors['step_up_value']; ?></span>
             </div>
             <div class="form__item <?= isset($errors['date_finish']) ? "form__item--invalid" : ""; ?>">
                 <label for="lot-date">Дата окончания торгов</label>
                 <input class="form__input-date" id="lot-date" type="date" name="lot[date_finish]"
                        value="<?= isset($lot['date_finish']) ? $lot['date_finish'] : ""; ?>">
-                <span class="form__error">Введите дату завершения торгов</span>
+                <span class="form__error"><?=$errors['date_finish']; ?></span>
             </div>
         </div>
         <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>

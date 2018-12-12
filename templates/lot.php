@@ -9,15 +9,14 @@
     </ul>
 </nav>
 <section class="lot-item container">
-    <?php foreach ($lot_info as $value) :?>
-        <h2><?=xss($value["lot_name"]);?></h2>
+        <h2><?=xss($lot_info["lot_name"]);?></h2>
     <div class="lot-item__content">
         <div class="lot-item__left">
             <div class="lot-item__image">
-                <img src="<?=xss($value["image"]);?>" width="730" height="548" alt="Сноуборд">
+                <img src="<?=xss($lot_info["image"]);?>" width="730" height="548" alt="Сноуборд">
             </div>
-            <p class="lot-item__category">Категория: <span><?=xss($value["category"]);?></span></p>
-            <p class="lot-item__description"><?=xss($value["specification"]);?>
+            <p class="lot-item__category">Категория: <span><?=xss($lot_info["category"]);?></span></p>
+            <p class="lot-item__description"><?=xss($lot_info["specification"]);?>
             </p>
         </div>
         <div class="lot-item__right">
@@ -28,10 +27,10 @@
                 <div class="lot-item__cost-state">
                     <div class="lot-item__rate">
                         <span class="lot-item__amount">Текущая цена</span>
-                        <span class="lot-item__cost"><?=number_form_rub(xss($value["cost"]));?></span>
+                        <span class="lot-item__cost"><?=number_form_rub(xss($lot_info["cost"]));?></span>
                     </div>
                     <div class="lot-item__min-cost">
-                        Мин. ставка <span><?=xss($value["step_up_value"]);?> р</span>
+                        Мин. ставка <span><?=xss($lot_info["step_up_value"]);?> р</span>
                     </div>
                 </div>
                 <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
@@ -100,6 +99,5 @@
             </div>
         </div>
     </div>
-    <?php endforeach;?>
 </section>
 </main>
