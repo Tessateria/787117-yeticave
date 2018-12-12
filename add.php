@@ -114,6 +114,6 @@ VALUES (?, ?, ?, ?, ?, 2, ?, ?) ";
 $layout_content = include_template("layout.php", [
     'page_content' => $page_content,
     'categories' => $categories,
-    'title' => $title
+    'title' => 'Добавление лота'
 ]);
 print($layout_content);

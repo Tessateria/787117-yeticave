@@ -3,7 +3,6 @@ date_default_timezone_set("Europe/Moscow");
 $is_auth = rand(0, 1);
 
 $user_name = 'Наталья';
-$title = 'Главная';
 $user_avatar = 'img/user.jpg';
 
 
@@ -58,7 +57,7 @@ $layout_content = include_template("layout.php", [
     'is_auth' => $is_auth,
     'user_avatar' => $user_avatar,
     'categories' => $categories,
-    'title' => $title
+    'title' => 'Главная'
 ]);
 print($layout_content);
 
