@@ -23,12 +23,15 @@ function xss ($arg){
     $text = strip_tags($arg);
     return $text;
 }
-function time_to_midnight (){
+function time_to_midnight ($end_date)
+{
     $time_now = date_create();
-    $time_end = date_create('tomorrow');
+    $time_end = date_create($end_date);
     $diff = date_diff($time_end, $time_now);
-    $date_modified = date_interval_format($diff, '%H:%I');
-    return $date_modified;
+    $days = date_interval_format($diff, '%D');
+    $hours = date_interval_format($diff, '%H');
+    $minutes = date_interval_format($diff, '%I');
+    return ($days * 24 + $hours).':'.$minutes;
 }
 function check_lots_cost($arr){
     foreach ($arr as $key => $lot) {
@@ -38,4 +41,39 @@ function check_lots_cost($arr){
         }
     }
     return $arr;
+}
+
+function db_get_prepare_stmt($link, $sql, $data = []) {
+    $stmt = mysqli_prepare($link, $sql);
+
+    if ($data) {
+        $types = '';
+        $stmt_data = [];
+
+        foreach ($data as $value) {
+            $type = null;
+
+            if (is_int($value)) {
+                $type = 'i';
+            }
+            else if (is_string($value)) {
+                $type = 's';
+            }
+            else if (is_double($value)) {
+                $type = 'd';
+            }
+
+            if ($type) {
+                $types .= $type;
+                $stmt_data[] = $value;
+            }
+        }
+
+        $values = array_merge([$stmt, $types], $stmt_data);
+
+        $func = 'mysqli_stmt_bind_param';
+        $func(...$values);
+    }
+
+    return $stmt;
 }

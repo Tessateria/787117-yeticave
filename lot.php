@@ -31,8 +31,8 @@ else {
 
     if (isset($_GET['id'])) {
         $lot_id = intval($_GET['id']);
-        $sql_lot = "SELECT l.lot_name, l.specification, l.image, l.start_price, l.step_up_value, r.cost AS cost FROM lots l
-INNER JOIN categories ON l.category_id=categories.id
+        $sql_lot = "SELECT l.lot_name, l.specification, l.image, l.start_price, l.step_up_value, l.date_finish, c.category, r.cost AS cost FROM lots l
+INNER JOIN categories c ON l.category_id=c.id
 LEFT OUTER JOIN rates r ON l.id = r.lot_id
 WHERE l.id=$lot_id
 ORDER BY date_add DESC LIMIT 1";
@@ -47,8 +47,8 @@ ORDER BY date_add DESC LIMIT 1";
                 $lot_info = check_lots_cost($lot_info);
                 $page_content = include_template('lot.php', [
                     'categories' => $categories,
-                    'lot_info' => $lot_info,
-                    'time_to_midnight' => time_to_midnight()
+                    'lot_info' => $lot_info[0],
+                    'time_to_midnight' => time_to_midnight($lot_info[0]['date_finish'])
                 ]);
             }
         }
