@@ -91,3 +91,39 @@ function debug($var)
     var_dump($var);
     echo '</pre>';
 }
+
+function get_categories($link)
+{
+    $sql_cat = "SELECT * FROM categories";
+    $result_c = mysqli_query($link, $sql_cat);
+
+    if ($result_c) {
+        return mysqli_fetch_all($result_c, MYSQLI_ASSOC);
+    } else {
+        echo "Не удалось получить информацию с БД";
+    }
+}
+
+function format_rate($rate)
+{
+    $rate['cost'] = number_format($rate['cost'], $decimals = 0, $dec_point = ".", $thousands_sep = " ");
+    $time_now = date_create();
+    $time_add = date_create($rate['date_add']);
+    $time_string = '';
+
+    $diff = date_diff($time_now, $time_add);
+    $hours = date_interval_format($diff, '%H');
+    $minutes = date_interval_format($diff, '%I');
+
+    $check_minutes = $hours * 60 + $minutes;
+    if ($check_minutes == 60) {
+        $time_string = '1 час назад';
+    } elseif ($check_minutes < 60) {
+        $time_string = $check_minutes.' минут назад';
+    } else {
+        $time_string = date_format($time_add, "d.m.y в H:i");
+    }
+
+    $rate['date_add'] = $time_string;
+    return $rate;
+}
