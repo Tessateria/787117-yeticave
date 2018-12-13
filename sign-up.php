@@ -32,7 +32,8 @@ if (!$link) {
                 $errors['email'] = 'Поле заполнено не корректно';
                 $user['email'] = $_POST['email'];
             } else {
-                $sql_user = "SELECT * FROM users WHERE email='" . $user['email'] . "'";
+                $email = mysqli_real_escape_string($link, $_POST['email'] );
+                $sql_user = "SELECT * FROM users WHERE email='$email'";
                 $SQLresult = mysqli_query($link, $sql_user);
 
                 if ($SQLresult) {
@@ -105,6 +106,13 @@ SET email = '" . $user['email'] . "',
 	contacts ='" . $user['message'] . "'";
             mysqli_query($link, $sql_add);
             header("Location:login.php");
+
+//    $password = password_hash($user['password'], PASSWORD_DEFAULT);
+//    $sql_user = "INSERT INTO users (email, username, password, avatar, contacts) VALUES (?, ?, ?, ?, ?)";
+//    $stmt = db_get_prepare_stmt($link, $sql_user, [$user['email'], $user['username'], $password, $user['image_path'], $user['contacts']]);
+//    $res = mysqli_stmt_execute($stmt);
+//    header("Location:login.php");
+
         }
 
     }
@@ -117,7 +125,8 @@ SET email = '" . $user['email'] . "',
 
     $layout_content = include_template("layout.php", [
         'page_content' => $page_content,
-        'categories' => $categories
+        'categories' => $categories,
+        'title' => 'Регистрация'
     ]);
     print($layout_content);
 }
