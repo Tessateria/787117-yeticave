@@ -60,7 +60,7 @@ ORDER BY date_add DESC LIMIT 1";
         'is_auth' => $is_auth,
         'user_avatar' => $user_avatar,
         'categories' => $categories,
-        'title' => $title
+        'title' => $lot_info[0]['lot_name']
     ]);
 
     print($layout_content);
