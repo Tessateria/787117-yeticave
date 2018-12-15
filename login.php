@@ -17,24 +17,7 @@ $user = [];
 $db_user = [];
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-//        $form = $_POST['signup'];
-//        $required = ['email', 'password'];
-//        foreach ($required as $field) {
-//            if(empty($form[$field] || !isset($form[$field]))){
-//                $errors[$field] = 'Заполните это поле';
-//                $user[$field] = $form[$field];
-//            } else {
-//                $user['email'] = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-//                if ($user['email'] === false) {
-//                    $errors['email'] = 'Поле заполнено не корректно';
-//                    $user[$field] = $form[$field];
-//                }
-//                $user[$field] = $form[$field];
-//            }
-//        }
-
+if ($_SERVER["REQUEST_METHOD"] == "POST") {git checkout master
 
     /// validate email
     if (!isset($_POST['email']) || empty($_POST['email'])) {

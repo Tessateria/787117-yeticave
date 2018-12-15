@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ]);
     } else {
         $sql_add = "INSERT INTO lots (lot_name, specification, image, start_price, step_up_value, author_id, category_id, date_finish) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
         $sql_pre = db_get_prepare_stmt($link, $sql_add, [$lot['lot_name'], $lot['specification'], 'img/' . $path, $lot['start_price'], $lot['step_up_value'], $user['id'], $lot['category_id'], $change_date_fin]);
         $res = mysqli_stmt_execute($sql_pre);
 

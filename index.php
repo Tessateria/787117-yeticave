@@ -16,11 +16,11 @@ if (isset($_SESSION['user'])) {
 }
 
 $sql_lot = "SELECT l.id, l.lot_name, l.start_price, l.image, l.date_finish, c.category AS category, MAX(r.cost) AS cost
-FROM lots l
-LEFT OUTER JOIN categories c ON l.category_id=c.id
-LEFT OUTER JOIN rates r ON l.id = r.lot_id
-GROUP BY l.id
-ORDER BY date_create DESC";
+    FROM lots l
+    LEFT OUTER JOIN categories c ON l.category_id=c.id
+    LEFT OUTER JOIN rates r ON l.id = r.lot_id
+    GROUP BY l.id
+    ORDER BY date_create DESC";
 $result_l = mysqli_query($link, $sql_lot);
 
 if ($result_l) {

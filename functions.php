@@ -32,11 +32,15 @@ function time_to_midnight ($end_date)
 {
     $time_now = date_create();
     $time_end = date_create($end_date);
-    $diff = date_diff($time_end, $time_now);
-    $days = date_interval_format($diff, '%D');
-    $hours = date_interval_format($diff, '%H');
-    $minutes = date_interval_format($diff, '%I');
-    return ($days * 24 + $hours).':'.$minutes;
+     if ($time_end > $time_now) {
+         $diff = date_diff($time_end, $time_now);
+         $days = date_interval_format($diff, '%D');
+         $hours = date_interval_format($diff, '%H');
+         $minutes = date_interval_format($diff, '%I');
+         return ($days * 24 + $hours) . ':' . $minutes;
+     } else
+         return false;
+
 }
 
 function check_lots_cost($arr)
@@ -126,4 +130,6 @@ function format_rate($rate)
 
     $rate['date_add'] = $time_string;
     return $rate;
+
+
 }

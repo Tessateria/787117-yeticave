@@ -93,20 +93,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errors)) {
+        $password = password_hash($user['password'], PASSWORD_DEFAULT);
         $sql_add = "INSERT INTO users
-SET email = '" . $user['email'] . "',
-	username = '" . $user['name'] . "',
-	password = '" . password_hash($user['password'], PASSWORD_DEFAULT) . "',
-	avatar = '" . $user['image_path'] . "',
-	contacts ='" . $user['message'] . "'";
-        mysqli_query($link, $sql_add);
-        header("Location:login.php");
-
-//    $password = password_hash($user['password'], PASSWORD_DEFAULT);
-//    $sql_user = "INSERT INTO users (email, username, password, avatar, contacts) VALUES (?, ?, ?, ?, ?)";
-//    $stmt = db_get_prepare_stmt($link, $sql_user, [$user['email'], $user['username'], $password, $user['image_path'], $user['contacts']]);
-//    $res = mysqli_stmt_execute($stmt);
-//    header("Location:login.php");
+            SET email = '" . $user['email'] . "',
+                username = '" . $user['name'] . "',
+                password = '$password',
+                avatar = '" . $user['image_path'] . "',
+                contacts ='" . $user['message'] . "'";
+                    mysqli_query($link, $sql_add);
+                    header("Location:login.php");
 
     }
 
