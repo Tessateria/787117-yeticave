@@ -17,7 +17,7 @@ $user = [];
 $db_user = [];
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {git checkout master
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     /// validate email
     if (!isset($_POST['email']) || empty($_POST['email'])) {

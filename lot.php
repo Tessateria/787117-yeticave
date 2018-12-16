@@ -34,13 +34,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result_l = mysqli_query($link, $sql_lot);
         $lot_info = mysqli_fetch_array($result_l, MYSQLI_ASSOC);
 
+        $lot_info = check_lots_cost([$lot_info]);
+        $lot_info[0]['min_rate'] = $lot_info[0]['cost'] + $lot_info[0]['step_up_value'];
+
+        if ($_POST['cost'] < $lot_info[0]['min_rate']) {
+            $errors['cost'] = 'Ставка должна быть больше';
+        }
+
         if (empty($errors)) {
-            $sql_add = "INSERT INTO rates (cost, user_id, lot_id) 
+            $sql_add = "INSERT INTO rates (cost, user_id, lot_id)
           VALUES (?, ?, ?) ";
             $sql_pre = db_get_prepare_stmt($link, $sql_add, [$cost, $user['id'], $lot_id]);
             $res = mysqli_stmt_execute($sql_pre);
             header('Location:lot.php?id=' . $lot_id);
         }
+    } else {
+        header('HTTP/1.0 403 Forbidden');
+        die();
     }
 }
 
@@ -58,8 +68,6 @@ if (isset($_GET['id'])) {
         $lot_info = mysqli_fetch_all($result_l, MYSQLI_ASSOC);
 
         if (!empty($lot_info)) {
-            $lot_info[0]['min_rate'] = $lot_info[0]['cost'] + $lot_info[0]['step_up_value'];
-            $lot_info[0]['min_rate'] = number_format($lot_info[0]['min_rate'], $decimals = 0, $dec_point = ".", $thousands_sep = " ");
             $lot_info[0]['is_time_end'] = false;
 
             if (date_create($lot_info[0]['date_finish']) < date_create("now")){
@@ -88,6 +96,9 @@ if (isset($_GET['id'])) {
                 }
             }
             $lot_info = check_lots_cost($lot_info);
+            $lot_info[0]['min_rate'] = $lot_info[0]['cost'] + $lot_info[0]['step_up_value'];
+            $lot_info[0]['min_rate'] = number_format($lot_info[0]['min_rate'], $decimals = 0, $dec_point = ".", $thousands_sep = " ");
+
             $lot_info[0]['rates'] = $rates;
             $page_content = include_template('lot.php', [
                 'categories' => $categories,

@@ -120,9 +120,9 @@ function format_rate($rate)
     $minutes = date_interval_format($diff, '%I');
 
     $check_minutes = $hours * 60 + $minutes;
-    if ($check_minutes == 60) {
+    if (($check_minutes == 60) && (date_format($time_now, "d.m.y") == date_format($time_add, "d.m.y"))) {
         $time_string = '1 час назад';
-    } elseif ($check_minutes < 60) {
+    } elseif (($check_minutes < 60) && (date_format($time_now, "d.m.y") == date_format($time_add, "d.m.y"))) {
         $time_string = $check_minutes.' минут назад';
     } else {
         $time_string = date_format($time_add, "d.m.y в H:i");

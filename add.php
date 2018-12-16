@@ -15,11 +15,27 @@ if (isset($_SESSION['user'])) {
     $user['avatar'] = $_SESSION['user']['avatar'];
     $user['id'] = $_SESSION['user']['id'];
 } else {
-    header("Location:login.php");
+    header('HTTP/1.0 403 Forbidden');
+    $page_content = include_template('403.php', [
+        'categories' => $categories
+    ]);
+
+    $layout_content = include_template("layout.php", [
+        'page_content' => $page_content,
+        'categories' => $categories,
+        'user' => $user,
+        'title' => '403'
+    ]);
+    print($layout_content);
+    die();
 }
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!isset($_SESSION['user'])) {
+        header('HTTP/1.0 403 Forbidden');
+        die();
+    }
     $lot = $_POST['lot'];
 
     $required = ['lot_name', 'category_id', 'specification', 'start_price', 'step_up_value', 'date_finish'];

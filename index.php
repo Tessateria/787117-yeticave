@@ -19,6 +19,7 @@ $sql_lot = "SELECT l.id, l.lot_name, l.start_price, l.image, l.date_finish, c.ca
     FROM lots l
     LEFT OUTER JOIN categories c ON l.category_id=c.id
     LEFT OUTER JOIN rates r ON l.id = r.lot_id
+    WHERE l.date_finish > NOW()
     GROUP BY l.id
     ORDER BY date_create DESC";
 $result_l = mysqli_query($link, $sql_lot);
