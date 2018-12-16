@@ -4,20 +4,20 @@ date_default_timezone_set("Europe/Moscow");
 require_once("functions.php");
 require_once("DB_connection.php");
 
-if (!$link) {
-    $error = mysqli_connect_error();
-    echo "Не удалось подключиться к MySQL";
-} else {
-    $sql_cat = "SELECT * FROM categories";
-    $result_c = mysqli_query($link, $sql_cat);
 
-    if ($result_c) {
-        $categories = mysqli_fetch_all($result_c, MYSQLI_ASSOC);
-    } else {
-        $error = mysqli_error($link);
-        echo "Не удалось получить информацию с БД";
-    }
+$categories = get_categories($link);
+
+session_start();
+$user = [];
+
+if (isset($_SESSION['user'])) {
+    $user['name'] = $_SESSION['user']['username'];
+    $user['avatar'] = $_SESSION['user']['avatar'];
+    $user['id'] = $_SESSION['user']['id'];
+} else {
+    header("Location:login.php");
 }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lot = $_POST['lot'];
@@ -37,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($lot["step_up_value"] === false) {
         $errors['step_up_value'] = 'В этом поле впишите число';
     }
-    if ($lot["step_up_value"] <= 0){
+    if ($lot["step_up_value"] <= 0) {
         $errors['step_up_value'] = "Cтавка должна быть больше нуля";
     }
-    if (empty($lot["step_up_value"])){
+    if (empty($lot["step_up_value"])) {
         $errors['step_up_value'] = "Введите шаг ставки";
     }
 
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors['start_price'] = 'В этом поле впишите число';
     }
 
-    if ($lot["start_price"] <= 0){
+    if ($lot["start_price"] <= 0) {
         $errors['start_price'] = "Цена должна быть больше нуля";
     }
 
@@ -58,17 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors['start_price'] = "Введите начальную цену";
     }
 
-    if (!intval($lot['category_id'])){
+    if (!intval($lot['category_id'])) {
         $errors['category_id'] = 'Это поле надо заполнить';
     }
 
     //Validation date_finish
-    $date_fin =  $lot['date_finish'];
-    $change_date_fin = date("Y-m-d H:i:s", strtotime($date_fin)) ;
+    $date_fin = $lot['date_finish'];
+    $change_date_fin = date("Y-m-d H:i:s", strtotime($date_fin));
 
     if (isset($date_fin)) {
-        if (strtotime($date_fin) <= strtotime("now")){
-             $errors ['date_finish'] = "Дата завершения не раньше завтра";
+        if (strtotime($date_fin) <= strtotime("now")) {
+            $errors ['date_finish'] = "Дата завершения не раньше завтра";
         }
     }
 
@@ -98,8 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ]);
     } else {
         $sql_add = "INSERT INTO lots (lot_name, specification, image, start_price, step_up_value, author_id, category_id, date_finish) 
-VALUES (?, ?, ?, ?, ?, 2, ?, ?) ";
-        $sql_pre = db_get_prepare_stmt($link, $sql_add, [$lot['lot_name'], $lot['specification'], 'img/'.$path, $lot['start_price'], $lot['step_up_value'], $lot['category_id'], $change_date_fin]);
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
+        $sql_pre = db_get_prepare_stmt($link, $sql_add, [$lot['lot_name'], $lot['specification'], 'img/' . $path, $lot['start_price'], $lot['step_up_value'], $user['id'], $lot['category_id'], $change_date_fin]);
         $res = mysqli_stmt_execute($sql_pre);
 
         $id = mysqli_insert_id($link);
@@ -114,6 +114,7 @@ VALUES (?, ?, ?, ?, ?, 2, ?, ?) ";
 $layout_content = include_template("layout.php", [
     'page_content' => $page_content,
     'categories' => $categories,
+    'user' => $user,
     'title' => 'Добавление лота'
 ]);
 print($layout_content);

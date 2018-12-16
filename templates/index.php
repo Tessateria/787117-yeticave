@@ -15,7 +15,7 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <?php foreach ($advertisement as $value):?>
+        <?php foreach ($lots as $value):?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?=xss($value["image"]);?>" width="350" height="260" alt="">
